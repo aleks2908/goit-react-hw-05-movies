@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Loader } from 'components/Loader/Loader';
 import css from './Home.module.css';
 
-export const Home = () => {
+const Home = () => {
   const [trandFilms, setTrandFilms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
@@ -69,7 +69,9 @@ export const Home = () => {
           </li>
         ))}
       </ul>
-      <Outlet />
     </main>
   );
 };
+
+
+export default Home;

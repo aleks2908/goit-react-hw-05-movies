@@ -3,7 +3,7 @@ import { Loader } from 'components/Loader/Loader';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-export const ReViews = () => {
+const ReViews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,3 +55,6 @@ export const ReViews = () => {
     </>
   );
 };
+
+
+export default ReViews;

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import css from '../../index.css';
 import noPoster from '../../images/no-poster.jpg';
 
-export const Cast = () => {
+const Cast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -83,3 +83,6 @@ export const Cast = () => {
     </>
   );
 };
+
+
+export default Cast;

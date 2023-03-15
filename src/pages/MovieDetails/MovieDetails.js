@@ -6,8 +6,9 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import css from './MovieDetails.module.css';
 import noPoster from '../../images/no-poster.jpg';
+import { Suspense } from 'react';
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
   const { movieId } = useParams();
   const location = useLocation();
   const [currentMovie, setCurrentMovie] = useState([]);
@@ -124,8 +125,11 @@ export const MovieDetails = () => {
           </Link>
         </li>
       </ul>
-
-      <Outlet />
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </main>
   );
 };
+
+export default MovieDetails;

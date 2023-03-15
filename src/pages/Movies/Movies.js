@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import css from './Movies.module.css';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 
-export const Movies = () => {
+const Movies = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const location = useLocation();
@@ -41,6 +41,9 @@ export const Movies = () => {
         );
 
         if (!resp.data.results.length) {
+          setIsLoading(false);
+          navigate('');
+          setMoviesByKayWord([]);
           toast.error('Sorry, no results were found for your search.', {
             position: 'top-right',
             autoClose: 5000,
@@ -51,11 +54,9 @@ export const Movies = () => {
             progress: undefined,
             theme: 'dark',
           });
-          setIsLoading(false);
-          navigate('');
-          setMoviesByKayWord([]);
           return;
         }
+
         setMoviesByKayWord(resp.data.results);
         navigate(`?query=${searchValue}`);
         setIsLoading(false);
@@ -92,3 +93,5 @@ export const Movies = () => {
     </main>
   );
 };
+
+export default Movies;
