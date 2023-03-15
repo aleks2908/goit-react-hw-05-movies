@@ -1,12 +1,11 @@
-import { Link, Outlet } from 'react-router-dom';
-import { useParams, useLocation } from 'react-router-dom';
-import { Loader } from 'components/Loader/Loader';
+import { useState, useEffect, Suspense } from 'react';
+import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+
+import { Loader } from 'components/Loader/Loader';
 import css from './MovieDetails.module.css';
 import noPoster from '../../images/no-poster.jpg';
-import { Suspense } from 'react';
 
 const MovieDetails = () => {
   const { movieId } = useParams();

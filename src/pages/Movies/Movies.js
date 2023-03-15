@@ -1,11 +1,16 @@
-import { Link } from 'react-router-dom';
-import { Loader } from 'components/Loader/Loader';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from 'react-router-dom';
+import axios from 'axios';
 import { toast } from 'react-toastify';
-import css from './Movies.module.css';
+
+import { Loader } from 'components/Loader/Loader';
 import { Searchbar } from 'components/Searchbar/Searchbar';
+import css from './Movies.module.css';
 
 const Movies = () => {
   const navigate = useNavigate();

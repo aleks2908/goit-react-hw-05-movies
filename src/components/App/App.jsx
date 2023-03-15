@@ -1,16 +1,11 @@
 import 'modern-normalize';
+import { lazy, Suspense } from 'react';
 import { Route, Routes, NavLink } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-// import { Home } from 'pages/Home/Home';
-// import { Movies } from 'pages/Movies/Movies';
-// import { MovieDetails } from 'pages/MovieDetails/MovieDetails';
-// import { Cast } from '../Cast/Cast';
-// import { ReViews } from '../Reviews/Reviews';
-import 'react-toastify/dist/ReactToastify.css';
-import css from './App.module.css';
-import { lazy, Suspense } from 'react';
-import { Loader } from 'components/Loader/Loader';
 
+import 'react-toastify/dist/ReactToastify.css';
+import { Loader } from 'components/Loader/Loader';
+import css from './App.module.css';
 
 const Home = lazy(() => import('../../pages/Home/Home'));
 const Movies = lazy(() => import('../../pages/Movies/Movies'));
@@ -19,7 +14,6 @@ const MovieDetails = lazy(() =>
 );
 const Cast = lazy(() => import('../Cast/Cast'));
 const ReViews = lazy(() => import('../Reviews/Reviews'));
-
 
 const App = () => {
   return (
@@ -34,7 +28,7 @@ const App = () => {
           </NavLink>
         </nav>
       </header>
-      <Suspense fallback={<Loader/>}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
@@ -61,6 +55,5 @@ const App = () => {
     </>
   );
 };
-
 
 export default App;

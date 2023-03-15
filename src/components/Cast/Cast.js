@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { Loader } from 'components/Loader/Loader';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-toastify';
+
+import { Loader } from 'components/Loader/Loader';
 import css from '../../index.css';
 import noPoster from '../../images/no-poster.jpg';
 

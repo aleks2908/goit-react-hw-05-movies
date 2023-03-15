@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom';
-import { Loader } from 'components/Loader/Loader';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+import { Loader } from 'components/Loader/Loader';
 
 const ReViews = () => {
   const { movieId } = useParams();
@@ -55,6 +56,5 @@ const ReViews = () => {
     </>
   );
 };
-
 
 export default ReViews;

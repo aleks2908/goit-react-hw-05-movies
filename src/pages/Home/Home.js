@@ -1,7 +1,9 @@
-import axios from 'axios';
+
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, useLocation } from 'react-router-dom';
+
 import { Loader } from 'components/Loader/Loader';
 import css from './Home.module.css';
 
