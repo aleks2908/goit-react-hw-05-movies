@@ -1,25 +1,18 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Loader } from 'components/Loader/Loader';
 import css from './Home.module.css';
 
-
 export const Home = () => {
-  //   const [searchValue, setSearchValue] = useState('');
-  //   const [page, setPage] = useState(1);
   const [trandFilms, setTrandFilms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  //   const [isLoadMoreBtnHidden, setIsLoadMoreBtnHidden] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    // if (!searchValue) {
-    //   return;
-    // }
-
     setIsLoading(true);
-    // setIsLoadMoreBtnHidden(false);
+    const abortController = new AbortController();
 
     async function fetchData() {
       const API_KEY = '6b1b36ecf2f3f3c0d27307e18cbffcb3';
@@ -27,12 +20,9 @@ export const Home = () => {
 
       try {
         const resp = await axios.get(
-          `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${1}`
+          `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`,
+          { signal: abortController.signal }
         );
-
-        //   const trandFilms = resp.data.results;
-       
-        // console.log(resp.data.results);
 
         if (!resp.data.results) {
           toast.error(
@@ -48,34 +38,34 @@ export const Home = () => {
               theme: 'dark',
             }
           );
-             setIsLoading(false);
-          return;
-          }
-          setTrandFilms(resp.data.results);
           setIsLoading(false);
-
+          return;
+        }
+        setTrandFilms(resp.data.results);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
 
     fetchData();
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
     <main>
       <h1>Trending today</h1>
 
-      {isLoading && (
-        <div>
-          <Loader />
-        </div>
-      )}
+      {isLoading && <Loader />}
 
       <ul>
         {trandFilms.map(({ id, original_title }) => (
           <li className={css.listItem} key={id}>
-            <Link to={`/movies/${id}`}>{original_title}</Link>
+            <Link to={`/movies/${id}`} state={{ from: location }}>
+              {original_title}
+            </Link>
           </li>
         ))}
       </ul>

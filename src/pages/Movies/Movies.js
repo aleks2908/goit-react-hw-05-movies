@@ -1,47 +1,34 @@
 import { Link } from 'react-router-dom';
-// import { useParams } from 'react-router-dom';
 import { Loader } from 'components/Loader/Loader';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-
 import css from './Movies.module.css';
+import { Searchbar } from 'components/Searchbar/Searchbar';
 
 export const Movies = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
-
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [moviesByKayWord, setMoviesByKayWord] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    if (searchValue.trim() === '') {
-      toast.warn('Please enter a film name', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-      });
+  const query = searchParams.get('query');
+
+  if (!searchValue && query) {
+    setSearchValue(query);
+  }
+
+  useEffect(() => {
+    if (!searchValue) {
       return;
     }
-    setSearchValue('');
-    // onSubmit(searchValue.toLowerCase().trim());
-    // console.log(searchValue.toLowerCase().trim());
 
-    // useEffect(() => {
-    // if (!searchValue) {
-    //   return;
-    // }
+    const abortController = new AbortController();
 
     setIsLoading(true);
-    // setIsLoadMoreBtnHidden(false);
 
     async function fetchData() {
       const API_KEY = '6b1b36ecf2f3f3c0d27307e18cbffcb3';
@@ -49,12 +36,9 @@ export const Movies = () => {
 
       try {
         const resp = await axios.get(
-          `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${searchValue}&page=${1}`
+          `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${searchValue}&page=${1}`,
+          { signal: abortController.signal }
         );
-
-        //   const trandFilms = resp.data.results;
-
-        // console.log(resp.data.results);
 
         if (!resp.data.results.length) {
           toast.error('Sorry, no results were found for your search.', {
@@ -68,6 +52,8 @@ export const Movies = () => {
             theme: 'dark',
           });
           setIsLoading(false);
+          navigate('');
+          setMoviesByKayWord([]);
           return;
         }
         setMoviesByKayWord(resp.data.results);
@@ -79,40 +65,27 @@ export const Movies = () => {
     }
 
     fetchData();
-    // }, []);
-  };
+    return () => {
+      abortController.abort();
+    };
+  }, [navigate, searchValue]);
 
-  const handleChange = event => {
-    setSearchValue(event.currentTarget.value);
+  const handleFormSubmit = searchValue => {
+    setSearchValue(searchValue);
   };
 
   return (
     <main>
-      <form onSubmit={handleSubmit} className={css.form}>
-        <input
-          onChange={handleChange}
-          // className={css.input}
-          type="text"
-          value={searchValue}
-          autoComplete="off"
-          autoFocus
-          // placeholder="Search images and photos"
-        />
-        <button type="submit" className={css.button}>
-          Search
-        </button>
-      </form>
+      <Searchbar onSubmit={handleFormSubmit} />
 
-      {isLoading && (
-        <div>
-          <Loader />
-        </div>
-      )}
+      {isLoading && <Loader />}
 
       <ul>
         {moviesByKayWord.map(({ id, original_title }) => (
           <li className={css.listItem} key={id}>
-            <Link to={`/movies/${id}`}>{original_title}</Link>
+            <Link to={`/movies/${id}`} state={{ from: location }}>
+              {original_title}
+            </Link>
           </li>
         ))}
       </ul>

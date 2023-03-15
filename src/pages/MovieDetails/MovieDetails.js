@@ -1,32 +1,22 @@
 import { Link, Outlet } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Loader } from 'components/Loader/Loader';
-
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-
 import css from './MovieDetails.module.css';
 import noPoster from '../../images/no-poster.jpg';
 
 export const MovieDetails = () => {
   const { movieId } = useParams();
-
-  // const location = useLocation();
-    // const backLink = location.state?.from ?? '/';
-  // console.log(movieId);
-
+  const location = useLocation();
   const [currentMovie, setCurrentMovie] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  //   const [isLoadMoreBtnHidden, setIsLoadMoreBtnHidden] = useState(false);
+  const backLinkHref = location.state?.from ?? '/';
 
   useEffect(() => {
-    // if (!searchValue) {
-    //   return;
-    // }
-
     setIsLoading(true);
-    // setIsLoadMoreBtnHidden(false);
+    const abortController = new AbortController();
 
     async function fetchData() {
       const API_KEY = '6b1b36ecf2f3f3c0d27307e18cbffcb3';
@@ -34,12 +24,9 @@ export const MovieDetails = () => {
 
       try {
         const resp = await axios.get(
-          `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`
+          `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`,
+          { signal: abortController.signal }
         );
-
-        //   const trandFilms = resp.data.results;
-
-        //    console.log(resp.data);
 
         if (!resp.data) {
           toast.error(
@@ -66,9 +53,10 @@ export const MovieDetails = () => {
     }
 
     fetchData();
+    return () => {
+      abortController.abort();
+    };
   }, [movieId]);
-
-  // const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 
   const {
     poster_path,
@@ -92,15 +80,11 @@ export const MovieDetails = () => {
 
   return (
     <main>
-      <Link className={css.btnBack} type="button" to={'/'}>
+      <Link className={css.btnBack} type="button" to={backLinkHref}>
         &#x21e6; Go Back
       </Link>
 
-      {isLoading && (
-        <div className={css.vortexWrapper}>
-          <Loader />
-        </div>
-      )}
+      {isLoading && <Loader />}
 
       <div className={css.movieDetails}>
         <img
@@ -119,38 +103,21 @@ export const MovieDetails = () => {
           <p>{overview}</p>
           <b>Genres</b>
 
-          {/* {genres.map(({ id, name }) => (
-        <Link to={`genre/${id}`} state={{ from: location }} key={id}>
-          <li className={css.ganreListItem}>
-            <p>{name}</p>
-          </li>
-        </Link> */}
-
-          {/* {console.log(genres)} */}
-          {/* <p>{genres.map(genre => genre.name)}</p> */}
-
           <p>{genGenres(genres)}</p>
-          {/* <p>{console.log(genres.lenght)}</p> */}
-
-          {/* <img src=`"${poster_path}"` alt="" /> */}
         </div>
       </div>
 
       <h2>Additional information</h2>
       <ul className={css.addInformation}>
         <li>
-          <Link to="cast">
-            {/* {' '}
-            state={location.state} */}
+          <Link to="cast" state={location.state}>
             <p>
               <b>Cast</b>
             </p>
           </Link>
         </li>
         <li>
-          <Link to="reviews">
-            {/* {' '}
-            state={location.state} */}
+          <Link to="reviews" state={location.state}>
             <p>
               <b>Reviews</b>
             </p>

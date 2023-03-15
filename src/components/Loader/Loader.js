@@ -1,15 +1,19 @@
-import { ProgressBar } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
+import css from './Loader.module.css';
 
 export const Loader = () => {
   return (
-    <ProgressBar
-      height="80"
-      width="80"
-      ariaLabel="progress-bar-loading"
-      wrapperStyle={{}}
-      wrapperClass="progress-bar-wrapper"
-      borderColor="#F4442E"
-      barColor="#51E5FF"
-    />
+    <div className={css.loader}>
+      <ThreeDots
+        height="80"
+        width="80"
+        radius="9"
+        color="#4fa94d"
+        ariaLabel="three-dots-loading"
+        wrapperStyle={{}}
+        wrapperClassName=""
+        visible={true}
+      />
+    </div>
   );
 };

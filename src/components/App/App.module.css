@@ -2,15 +2,9 @@
   font-size: 26px;
   font-weight: bold;
   padding: 0 10px;
-  /* border: 2px solid black */
 }
-
-/* .nav{
-    height: 200px;
-} */
 
 header {
   border-bottom: 4px solid rgb(173, 168, 168);
-  /* background-color: aqua; */
   line-height: 40px;
 }
