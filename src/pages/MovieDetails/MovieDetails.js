@@ -96,7 +96,7 @@ const MovieDetails = () => {
 
         <div>
           <h2>
-            {original_title} ({new Date(release_date).getFullYear()})
+            {original_title} ({new Date(release_date).getFullYear() || "no data"})
           </h2>
           <p>User Score: {Math.floor(vote_average * 10)}</p>
           <h3>Overview</h3>
